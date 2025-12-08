@@ -1,40 +1,37 @@
 export default {
-  id: 'cosmos-hub-testnet', // DEPRECATE, only used for Lunie extension, NOT CHAIN ID
-  name: 'Cosmos Stargate',
+  id: 'akashnet-2', // DEPRECATE, only used for Lunie extension, NOT CHAIN ID
+  name: 'Akash Network',
   description:
-    'Cosmos is a network of independent parallel blockchains, powered by BFT consensus algorithms like Tendermint.',
+    'Akash is a decentralized cloud computing marketplace that enables users to rent and provision infrastructure using blockchain technology.',
   logo: `logo.svg`,
-  website: 'https://cosmos.network',
-  apiURL: 'http://localhost:8010/proxy', // use `npx lcp --proxyUrl http://34.123.30.100:1317`
-  rpcURL: 'ws://34.123.30.100:26657',
-  stakingDenom: 'MUON',
+  website: 'https://akash.network',
+  apiURL: 'https://consoleapi.akashnet.net:443', // use `npx lcp --proxyUrl http://34.123.30.100:1317`
+  rpcURL: 'https://consolerpc.akashnet.net:443',
+  stakingDenom: 'AKT',
   coinLookup: [
     {
-      viewDenom: 'MUON',
-      chainDenom: 'umuon',
+      viewDenom: 'AKT',
+      chainDenom: 'uakt',
       chainToViewConversionFactor: 1e-6,
-      icon: `currencies/muon.png`,
+      icon: `currencies/akt.png`,
     },
   ],
-  addressPrefix: 'cosmos',
-  validatorAddressPrefix: 'cosmosvaloper',
-  validatorConsensusaddressPrefix: 'cosmosvalcons', // needed to map validators from staking queries to the validator set
+  addressPrefix: 'akash',
+  validatorAddressPrefix: 'akashvaloper',
+  validatorConsensusaddressPrefix: 'akashvalcons', // needed to map validators from staking queries to the validator set
   HDPath: `m/44'/118'/0'/0/0`,
-  lockUpPeriod: `3 days`,
+  lockUpPeriod: `21 days`,
   fees: {
     default: {
-      gasEstimate: 350000,
+      gasEstimate: 200000,
       feeOptions: [
         {
-          denom: 'MUON',
+          denom: 'AKT',
           amount: 0.001,
         },
       ],
     },
   },
   icon: `https://lunie.fra1.digitaloceanspaces.com/network-icons/cosmos.png`,
-
-  // This is only to be used as a developer tool and for testing purposes
-  // NEVER ENABLE LOCALSIGNING IN PRODUCTION OR FOR MAINNETS
   localSigning: false,
 }
