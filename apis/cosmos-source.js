@@ -47,8 +47,7 @@ export default class CosmosAPI {
   }
 
   async getAccountInfo(address) {
-    const accountInfo = await this.query(`/cosmos/auth/v1beta1/accounts/${address}`
-                                        )
+    const accountInfo = await this.query(`/cosmos/auth/v1beta1/accounts/${address}`)
     return {
       accountNumber: accountInfo.value.account_number,
       sequence: accountInfo.value.sequence || '0',
@@ -441,8 +440,7 @@ export default class CosmosAPI {
   async getBlock(blockHeight) {
     let block
     if (blockHeight) {
-      block = await this.get(`cosmos/base/tendermint/v1beta1/blocks/${blockHeight}`
-                            )
+      block = await this.get(`cosmos/base/tendermint/v1beta1/blocks/${blockHeight}`)
     } else {
       block = await this.get(`cosmos/base/tendermint/v1beta1/blocks/latest`)
     }
