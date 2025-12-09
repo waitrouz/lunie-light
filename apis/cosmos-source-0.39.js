@@ -456,7 +456,7 @@ export default class CosmosAPI {
 
   async getBalances(address) {
     const [balancesResponse, delegations, undelegations] = await Promise.all([
-      this.query(`bank/balances/${address}`),
+      this.query(`cosmos/bank/v1beta1/balances/${address}`),
       this.getDelegationsForDelegator(address),
       this.getUndelegationsForDelegator(address),
     ])
