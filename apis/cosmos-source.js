@@ -47,7 +47,7 @@ export default class CosmosAPI {
   }
 
   async getAccountInfo(address) {
-    const accountInfo = await this.query(`/auth/accounts/${address}`)
+    const accountInfo = await this.query(`/cosmos/auth/v1beta1/accounts/${address}`)
     return {
       accountNumber: accountInfo.value.account_number,
       sequence: accountInfo.value.sequence || '0',
@@ -62,17 +62,17 @@ export default class CosmosAPI {
   async getTransactions(address, pageNumber = 0) {
     // getting page count
     const [senderPage, recipientPage] = await Promise.all([
-      this.getPageCount(`/txs?message.sender=${address}`),
-      this.getPageCount(`/txs?transfer.recipient=${address}`),
+      this.getPageCount(`/cosmos/tx/v1beta1/txs?message.sender=${address}`),
+      this.getPageCount(`/cosmos/tx/v1beta1/txs?transfer.recipient=${address}`),
     ])
 
     const requests = [
       this.loadPaginatedTxs(
-        `/txs?message.sender=${address}`,
+        `/cosmos/tx/v1beta1/txs?message.sender=${address}`,
         senderPage - pageNumber
       ),
       this.loadPaginatedTxs(
-        `/txs?transfer.recipient=${address}`,
+        `/cosmos/tx/v1beta1/txs?transfer.recipient=${address}`,
         recipientPage - pageNumber
       ),
     ]
@@ -86,7 +86,7 @@ export default class CosmosAPI {
       if (senderPage - pageNumber > 1) {
         requests.push(
           this.loadPaginatedTxs(
-            `/txs?message.sender=${address}`,
+            `/cosmos/tx/v1beta1/txs?message.sender=${address}`,
             senderPage - pageNumber - 1
           )
         )
@@ -94,7 +94,7 @@ export default class CosmosAPI {
       if (recipientPage - pageNumber > 1) {
         requests.push(
           this.loadPaginatedTxs(
-            `/txs?transfer.recipient=${address}`,
+            `/cosmos/tx/v1beta1/txs?transfer.recipient=${address}`,
             recipientPage - pageNumber - 1
           )
         )
@@ -169,9 +169,9 @@ export default class CosmosAPI {
       signedBlocksWindow,
     ] = await Promise.all([
       Promise.all([
-        this.query(`staking/validators?status=unbonding`),
-        this.query(`staking/validators?status=bonded`),
-        this.query(`staking/validators?status=unbonded`),
+        this.query(`/cosmos/staking/v1beta1/validators?status=unbonding`),
+        this.query(`/cosmos/staking/v1beta1/validators?status=bonded`),
+        this.query(`/cosmos/staking/v1beta1/validators?status=unbonded`),
       ]).then((validatorGroups) => [].concat(...validatorGroups)),
       this.getAnnualProvision().catch(() => undefined),
       this.getValidatorSet(height),
@@ -222,9 +222,9 @@ export default class CosmosAPI {
       tallyingParameters,
       depositParameters,
     ] = await Promise.all([
-      this.query(`/gov/proposals/${proposal.id}/votes`),
-      this.query(`/gov/proposals/${proposal.id}/deposits`),
-      this.query(`/gov/proposals/${proposal.id}/tally`),
+      this.query(`/cosmos/gov/v1beta1/proposals/${proposal.id}/votes`),
+      this.query(`/cosmos/gov/v1beta1/proposals/${proposal.id}/deposits`),
+      this.query(`/cosmos/gov/v1beta1/proposals/${proposal.id}/tally`),
       this.query(`/gov/parameters/tallying`),
       this.query(`/gov/parameters/deposit`),
     ])
@@ -402,7 +402,7 @@ export default class CosmosAPI {
       '/staking/pool'
     )
     const [communityPoolArray, topVoters] = await Promise.all([
-      this.query('/distribution/community_pool'),
+      this.query('/cosmos/distribution/v1beta1/community_pool'),
       this.getTopVoters(),
     ])
     const stakingChainDenom = this.network.getCoinLookup(
@@ -589,7 +589,7 @@ export default class CosmosAPI {
   async getRewards(delegatorAddress) {
     await this.dataReady
     const result = await this.query(
-      `distribution/delegators/${delegatorAddress}/rewards`
+      `cosmos/distribution/v1beta1/delegators/${delegatorAddress}/rewards`
     )
     const rewards = (result.rewards || []).filter(
       ({ reward }) => reward && reward.length > 0
