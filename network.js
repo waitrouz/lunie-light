@@ -5,7 +5,7 @@ export default {
     'Akash is a decentralized cloud computing marketplace that enables users to rent and provision infrastructure using blockchain technology.',
   logo: `logo.svg`,
   website: 'https://akash.network',
-  apiURL: 'https://akash-rest.publicnode.com/cosmos/base/tendermint/v1beta1/', // use `npx lcp --proxyUrl http://34.123.30.100:1317`
+  apiURL: 'https://api.akashnet.net:443', // use `npx lcp --proxyUrl http://34.123.30.100:1317`
   rpcURL: 'https://akash-rpc.publicnode.com:443',
   stakingDenom: 'AKT',
   coinLookup: [
