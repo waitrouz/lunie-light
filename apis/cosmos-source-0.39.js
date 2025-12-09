@@ -47,7 +47,7 @@ export default class CosmosAPI {
   }
 
   async getAccountInfo(address) {
-    const result = await this.query(`/auth/accounts/${address}`)
+    const result = await this.query(`/cosmos/auth/v1beta1/accounts/${address}`)
     let accountInfo
     if (result.type === 'cosmos-sdk/DelayedVestingAccount') {
       const vestingAccountType = Object.keys(result.value)[0]
@@ -69,17 +69,17 @@ export default class CosmosAPI {
   async getTransactions(address, pageNumber = 0) {
     // getting page count
     const [senderPage, recipientPage] = await Promise.all([
-      this.getPageCount(`/txs?message.sender=${address}`),
-      this.getPageCount(`/txs?transfer.recipient=${address}`),
+      this.getPageCount(`/cosmos/tx/v1beta1/txs?message.sender=${address}`),
+      this.getPageCount(`/cosmos/tx/v1beta1/txs?transfer.recipient=${address}`),
     ])
 
     const requests = [
       this.loadPaginatedTxs(
-        `/txs?message.sender=${address}`,
+        `/cosmos/tx/v1beta1/txs?message.sender=${address}`,
         senderPage - pageNumber
       ),
       this.loadPaginatedTxs(
-        `/txs?transfer.recipient=${address}`,
+        `/cosmos/tx/v1beta1/txs?transfer.recipient=${address}`,
         recipientPage - pageNumber
       ),
     ]
@@ -409,7 +409,7 @@ export default class CosmosAPI {
       '/staking/pool'
     )
     const [communityPoolArray, topVoters] = await Promise.all([
-      this.query('/distribution/community_pool'),
+      this.query('/cosmos/distribution/v1beta1/community_pool'),
       this.getTopVoters(),
     ])
     const stakingChainDenom = this.network.getCoinLookup(
